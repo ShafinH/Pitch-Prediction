@@ -1,0 +1,39 @@
+
+```{r}
+library(tidyverse)
+```
+
+load in raw data
+
+```{r}
+games <- read_csv("data-raw/games.csv")
+
+atbats <- read_csv("data-raw/atbats.csv")
+
+pitches <- read_csv("data-raw/pitches.csv")
+```
+
+understanding a single game
+
+```{r}
+atbats_one_game <- 
+	atbats %>% 
+	filter(g_id == games$g_id[1]) %>% 
+	mutate(g_id = as.character(g_id), ab_id = as.character(ab_id)) %>% 
+	select(g_id, ab_id, everything())
+
+pitches_one_game <- 
+	pitches %>% 
+	filter(ab_id %in% atbats_one_game$ab_id) %>% 
+	mutate(ab_id = as.character(ab_id)) %>% 
+	select(ab_id, pitch_num, everything())
+
+pitches_one_game %>% View()
+```
+
+merge
+
+```{r}
+
+```
+
