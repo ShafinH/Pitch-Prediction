@@ -1,6 +1,7 @@
 
 ```{r}
 library(tidyverse)
+library(dplyr)
 ```
 
 load in raw data
@@ -11,6 +12,8 @@ games <- read_csv("data-raw/games.csv")
 atbats <- read_csv("data-raw/atbats.csv")
 
 pitches <- read_csv("data-raw/pitches.csv")
+
+merged_data <- read_csv("data-clean/test_clean.csv")
 ```
 
 understanding a single game
@@ -18,6 +21,12 @@ understanding a single game
 ```{r}
 atbats_one_game <- 
 	atbats %>% 
+	filter(g_id == games$g_id[1]) %>% 
+	mutate(g_id = as.character(g_id), ab_id = as.character(ab_id)) %>% 
+	select(g_id, ab_id, everything())
+
+merged_data_one_game <- 
+	merged_data %>% 
 	filter(g_id == games$g_id[1]) %>% 
 	mutate(g_id = as.character(g_id), ab_id = as.character(ab_id)) %>% 
 	select(g_id, ab_id, everything())
@@ -31,9 +40,27 @@ pitches_one_game <-
 pitches_one_game %>% View()
 ```
 
-merge
+```{r}
+pitches_one_game %>% 
+  count(pitch_type)
+```
+
+
+creating dataframe
 
 ```{r}
 
+```
+
+data visualization 
+
+```{r}
+ggplot(data = merged_data_one_game) +
+  geom_point(mapping = aes(x = s_count, y = pitch_type))
+
+ggplot(data = merged_data_one_game) +
+  geom_bar(mapping = aes(x = pitch_type, y = stat(prop), group =1 ))
+
+select(merged_data_one_game, s_count:pitch_num)
 ```
 
