@@ -46,10 +46,11 @@ pitches_one_game %>%
 ```
 
 
-creating dataframe
+creating the dataframe
 
 ```{r}
-
+df_test <- select(merged_data_one_game, s_count, b_count, pitch_num, ab_id)
+df_test
 ```
 
 data visualization 
@@ -61,6 +62,6 @@ ggplot(data = merged_data_one_game) +
 ggplot(data = merged_data_one_game) +
   geom_bar(mapping = aes(x = pitch_type, y = stat(prop), group =1 ))
 
-select(merged_data_one_game, s_count:pitch_num)
+
 ```
 
