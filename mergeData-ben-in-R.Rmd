@@ -59,7 +59,12 @@ test_df <-
 
 df_final <- 
     test_df %>%
-    mutate(last_ff_not = lag(pitch_type, 1))
+    mutate(last_ff_not = lag(case_when(is.na(pitch_type) ~ "N/A",
+                                      pitch_type == "FF" ~ "yes",
+                                      TRUE ~ "no"), 1))
+ 
+df_final <- select(df_final,-c(pitch_type))   
+
 
 ```
 
