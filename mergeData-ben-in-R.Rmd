@@ -51,8 +51,15 @@ creating the dataframe
 ```{r}
 df_test <- select(merged_data_one_game, pitch_type, s_count, b_count, pitch_num, ab_id)
 
-df_test %>%
-    mutate(previous_pitch = lag(pitch_type, 1))
+test_df <-
+  df_test %>% 
+  mutate(ff_not = case_when(is.na(pitch_type) ~ "N/A",
+                                      pitch_type == "FF" ~ "yes",
+                                      TRUE ~ "no"))
+
+df_final <- 
+    test_df %>%
+    mutate(last_ff_not = lag(pitch_type, 1))
 
 ```
 
