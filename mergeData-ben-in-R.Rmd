@@ -49,8 +49,11 @@ pitches_one_game %>%
 creating the dataframe
 
 ```{r}
-df_test <- select(merged_data_one_game, s_count, b_count, pitch_num, ab_id)
-df_test
+df_test <- select(merged_data_one_game, pitch_type, s_count, b_count, pitch_num, ab_id)
+
+df_test %>%
+    mutate(previous_pitch = lag(pitch_type, 1))
+
 ```
 
 data visualization 
