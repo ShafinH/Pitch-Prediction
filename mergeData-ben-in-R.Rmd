@@ -60,15 +60,20 @@ df_final <-
 df_final <- 
     df_final %>%
     mutate(last_ff_not = lag(case_when(is.na(pitch_type) ~ "N/A",
-                                      pitch_type == "FF" ~ "yes",
-                                      TRUE ~ "no"), 1))
+                                      pitch_type == "FF" ~ "FF",
+                                      pitch_type == "FT" ~ "FF",
+                                      pitch_type == "FC" ~ "FC",
+                                      pitch_type == "CU" ~ "CU",
+                                      pitch_type == "SL" ~ "SL",
+                                      pitch_type == "CH" ~ "CH",
+                                      TRUE ~ "OTHER"), 1))
  
 df_final <- select(df_final,-c(pitch_type))   
 
 
 ```
 
-data visualization 
+data visualization and analysis
 
 ```{r}
 ggplot(data = merged_data_one_game) +
@@ -76,6 +81,14 @@ ggplot(data = merged_data_one_game) +
 
 ggplot(data = merged_data_one_game) +
   geom_bar(mapping = aes(x = pitch_type, y = stat(prop), group =1 ))
+
+pitches_one_game %>% 
+  count(pitch_type)
+  print(pitch_num)
+  
+  
+  
+test_model <- lm()
 
 
 ```
