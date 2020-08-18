@@ -66,7 +66,7 @@ df_final <-
                                       pitch_type == "FT" ~ "FF",
                                       pitch_type == "FC" ~ "FF",
                                       pitch_type == "CU" ~ "CU/SL",
-                                      pitch_type == "SL" ~ "SL/SL",
+                                      pitch_type == "SL" ~ "CU/SL",
                                       pitch_type == "CH" ~ "CH",
                                       TRUE ~ "OTHER"), 1))
  
