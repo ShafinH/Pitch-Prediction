@@ -1,0 +1,11 @@
+
+```{r}
+library(tidyverse)
+df_final <- read_rds("data-for-models/df_final.rds")
+```
+
+```{r}
+df_final
+```
+
+

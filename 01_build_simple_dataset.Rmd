@@ -12,7 +12,7 @@ atbats <- read_csv("data-raw/atbats.csv")
 
 pitches <- read_csv("data-raw/pitches.csv")
 
-merged_data <- read_csv("data-clean/test_clean.csv")
+merged_data <- read_csv("data-clean/pitches_with_at_bats.csv")
 ```
 
 understanding a single game
@@ -44,33 +44,36 @@ pitches_one_game %>%
   count(pitch_type)
 ```
 
-
 creating the dataframe
 
 ```{r}
-df_final <- select(merged_data_one_game, pitch_type, s_count, b_count, pitch_num, ab_id)
-
 df_final <-
-  df_final %>% 
-  mutate(fastball = case_when(is.na(pitch_type) ~ "N/A",
-                                      pitch_type == "FF" ~ "yes",
-                                      pitch_type == "FT" ~ "yes",
-                                      TRUE ~ "no"))
-
-
-df_final <- 
-    df_final %>%
-    mutate(last_ff_not = lag(case_when(is.na(pitch_type) ~ "N/A",
-                                      pitch_type == "FF" ~ "FF",
-                                      pitch_type == "FT" ~ "FF",
-                                      pitch_type == "FC" ~ "FF",
-                                      pitch_type == "CU" ~ "CU/SL",
-                                      pitch_type == "SL" ~ "CU/SL",
-                                      pitch_type == "CH" ~ "CH",
-                                      TRUE ~ "OTHER"), 1))
- 
-df_final <- select(df_final,-c(pitch_type))  
-
+	merged_data_one_game %>% 
+	select(pitch_type, s_count, b_count, pitch_num, ab_id) %>% 
+	mutate(
+		fastball = 
+			case_when(
+				is.na(pitch_type) ~ "N/A",
+				pitch_type == "FF" ~ "yes",
+				pitch_type == "FT" ~ "yes",
+				TRUE ~ "no"
+			)
+	) %>% 
+    mutate(
+    	last_ff_not = 
+    		lag(
+    			case_when(
+    				is.na(pitch_type) ~ "N/A",
+    				pitch_type == "FF" ~ "FF",
+    				pitch_type == "FT" ~ "FF",
+    				pitch_type == "FC" ~ "FF",
+    				pitch_type == "CU" ~ "CU/SL",
+    				pitch_type == "SL" ~ "CU/SL",
+    				pitch_type == "CH" ~ "CH",
+    				TRUE ~ "OTHER"), 1
+    		)
+    ) %>% 
+	select(-pitch_type)
 ```
 
 data visualization and analysis
@@ -123,9 +126,10 @@ first_pitch %>%
 
 df_final %>%
   count(fastball)
-  
-test_model <- lm()
-
-
 ```
 
+save df_final
+
+```{r}
+df_final %>% write_rds("data-for-models/df_final.rds")
+```
