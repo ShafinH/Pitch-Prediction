@@ -1,7 +1,6 @@
 
 ```{r}
 library(tidyverse)
-library(dplyr)
 ```
 
 load in raw data
