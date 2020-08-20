@@ -1,11 +1,63 @@
 
 ```{r}
 library(tidyverse)
-df_final <- read_rds("data-for-models/df_final.rds")
+library(broom)
+library(modelr)
+library(e1071)
+
+df_final <- 
+	read_rds("data-for-models/df_final.rds") %>% 
+	mutate(fastball = ifelse(fastball == "yes", 1, 0))
 ```
 
 ```{r}
-df_final
+model <- 
+	glm(
+		fastball ~ s_count + b_count + pitch_num + last_ff_not,
+		data = df_final,
+		family = "binomial"
+	)
+
+tidy(model)
+
+df_final_with_pred <- 
+	df_final %>% 
+	add_predictions(model, type = "response")
+
+df_final_with_pred %>% 
+	ggplot(aes(x = pred)) +
+	geom_histogram() +
+	facet_wrap(~ fastball, ncol = 1)
+
+df_final_with_pred %>% 
+	mutate(
+		correct = 
+			ifelse(
+				(pred > 0.5 & fastball == 1) |
+					(pred < 0.5 & fastball == 0),
+				1,
+				0
+			)
+	) %>% 
+	summarize(mean(correct, na.rm = TRUE))
 ```
 
+```{r}
+model_svm <- 
+	svm(
+		fastball ~ s_count + b_count + pitch_num + last_ff_not,
+		data = 
+			df_final %>% 
+			mutate(fastball = ifelse(fastball == 1, 1, -1))
+	)
+
+df_final %>% 
+	slice(-1) %>% 
+	mutate(pred = predict(model_svm)) %>% 
+	mutate(pred2 = as.integer(pred > 0)) %>% 
+	mutate(
+		correct = fastball == pred2
+	) %>% 
+	summarize(mean(correct))
+```
 
