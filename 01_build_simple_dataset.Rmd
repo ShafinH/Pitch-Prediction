@@ -74,6 +74,10 @@ df_final <-
     		)
     ) %>% 
 	select(-pitch_type)
+
+df_final <-
+  df_final %>%
+    mutate(fastball = ifelse(fastball == "yes", 1, 0))
 ```
 
 data visualization and analysis
