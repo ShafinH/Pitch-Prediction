@@ -4,10 +4,6 @@ library(tidyverse)
 library(broom)
 library(modelr)
 library(e1071)
-
-df_final <- 
-	read_rds("data-for-models/df_final.rds") %>% 
-	mutate(fastball = ifelse(fastball == "yes", 1, 0))
 ```
 
 ```{r}
