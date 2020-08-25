@@ -36,6 +36,10 @@ pitches_one_game <-
 	mutate(ab_id = as.character(ab_id)) %>% 
 	select(ab_id, pitch_num, everything())
 
+merged_data_multiple_games <-
+  merged_data %>%
+  filter(g_id < 201500100)
+
 pitches_one_game %>% View()
 ```
 
@@ -48,8 +52,8 @@ creating the dataframe
 
 ```{r}
 df_final <-
-	merged_data_one_game %>% 
-	select(pitch_type, s_count, b_count, pitch_num, ab_id) %>% 
+	merged_data_multiple_games %>% 
+	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id) %>% 
 	mutate(
 		fastball = 
 			case_when(
@@ -74,6 +78,10 @@ df_final <-
     		)
     ) %>% 
 	select(-pitch_type)
+
+df_final <-
+  df_final %>%
+    mutate(fastball = ifelse(fastball == "yes", 1, 0))
 ```
 
 data visualization and analysis

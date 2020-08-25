@@ -4,10 +4,9 @@ library(tidyverse)
 library(broom)
 library(modelr)
 library(e1071)
-
-df_final <- 
-	read_rds("data-for-models/df_final.rds") %>% 
-	mutate(fastball = ifelse(fastball == "yes", 1, 0))
+library(randomForest)
+library(rsample)
+library(caret)
 ```
 
 ```{r}
@@ -45,7 +44,7 @@ df_final_with_pred %>%
 ```{r}
 model_svm <- 
 	svm(
-		fastball ~ s_count + b_count + pitch_num + last_ff_not,
+		fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b ,
 		data = 
 			df_final %>% 
 			mutate(fastball = ifelse(fastball == 1, 1, -1))
@@ -59,5 +58,34 @@ df_final %>%
 		correct = fastball == pred2
 	) %>% 
 	summarize(mean(correct))
+```
+
+```{r}
+df_split <- initial_split(df_final, prop = .7)
+data_train <- training(df_split)
+data_test  <- testing(df_split)
+
+data_train[is.na(data_train)] = "FF"
+
+# Define the control
+trControl <- trainControl(method = "cv",
+    number = 10,
+    search = "grid")
+
+set.seed(1234)
+
+#Run the model
+rf_default <- train(fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+    data = data_train,
+    method = "rf",
+    metric = "Accuracy",
+    trControl = trControl)
+
+# Print the results
+print(rf_default)
+
+
+
+
 ```
 
