@@ -4,3 +4,5 @@
 .Ruserdata
 data-raw/
 data-clean/
+*.Rproj
+.DS_Store
