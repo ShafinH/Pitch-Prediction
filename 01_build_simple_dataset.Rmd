@@ -40,6 +40,10 @@ merged_data_multiple_games <-
   merged_data %>%
   filter(g_id < 201500100)
 
+merged_data_2018 <-
+  merged_data %>%
+  filter(g_id >= 201800000)
+
 pitches_one_game %>% View()
 ```
 
@@ -52,7 +56,7 @@ creating the dataframe
 
 ```{r}
 df_final <-
-	merged_data_multiple_games %>% 
+	merged_data_2018 %>% 
 	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id) %>% 
 	mutate(
 		fastball = 
@@ -83,6 +87,45 @@ df_final <-
   df_final %>%
     mutate(fastball = ifelse(fastball == "yes", 1, 0))
 ```
+
+Multi Class Dataframe
+
+```{r}
+df_multi_class <-
+	merged_data_2018 %>% 
+	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id) %>% 
+	mutate(
+		fastball = 
+			case_when(
+				is.na(pitch_type) ~ "N/A",
+				pitch_type == "FF" ~ "FF",
+				pitch_type == "FT" ~ "FF",
+				pitch_type == "FC" ~ "FC",
+				pitch_type == "CU" ~ "CU/SL",
+				pitch_type == "SL" ~ "CU/SL",
+				pitch_type == "CH" ~ "CH",
+				TRUE ~ "other"
+			)
+	) %>% 
+    mutate(
+    	last_ff_not = 
+    		lag(
+    			case_when(
+    				is.na(pitch_type) ~ "N/A",
+    				pitch_type == "FF" ~ "FF",
+    				pitch_type == "FT" ~ "FF",
+    				pitch_type == "FC" ~ "FF",
+    				pitch_type == "CU" ~ "CU/SL",
+    				pitch_type == "SL" ~ "CU/SL",
+    				pitch_type == "CH" ~ "CH",
+    				TRUE ~ "OTHER"), 1
+    		)
+    ) %>% 
+	select(-pitch_type)
+
+
+```
+
 
 data visualization and analysis
 
@@ -140,4 +183,5 @@ save df_final
 
 ```{r}
 df_final %>% write_rds("data-for-models/df_final.rds")
+
 ```
