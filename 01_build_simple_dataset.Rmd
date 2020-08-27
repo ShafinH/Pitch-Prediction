@@ -44,6 +44,7 @@ merged_data_2018 <-
   merged_data %>%
   filter(g_id >= 201800000)
 
+
 pitches_one_game %>% View()
 ```
 
