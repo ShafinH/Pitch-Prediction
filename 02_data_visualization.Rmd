@@ -1,0 +1,19 @@
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+
+df_final %>%
+  count(fastball)
+  counts <- table(df_final$fastball)
+  barplot(counts, main="Fastballs 2018")
+  
+ggplot(data = df_final) + 
+geom_bar(mapping = aes(x = fastball))
+  
+
+
+```
+

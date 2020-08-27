@@ -4,6 +4,9 @@ library(tidyverse)
 library(broom)
 library(modelr)
 library(e1071)
+library(randomForest)
+library(rsample)
+library(caret)
 ```
 
 ```{r}
@@ -41,7 +44,7 @@ df_final_with_pred %>%
 ```{r}
 model_svm <- 
 	svm(
-		fastball ~ s_count + b_count + pitch_num + last_ff_not,
+		fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b ,
 		data = 
 			df_final %>% 
 			mutate(fastball = ifelse(fastball == 1, 1, -1))
@@ -55,5 +58,113 @@ df_final %>%
 		correct = fastball == pred2
 	) %>% 
 	summarize(mean(correct))
+```
+
+```{r}
+df_split <- initial_split(df_final, prop = .7)
+data_train <- training(df_split)
+data_test  <- testing(df_split)
+
+data_train[is.na(data_train)] = "FF"
+
+# Define the control
+trControl <- trainControl(method = "cv",
+    number = 10,
+    search = "grid")
+
+
+#Run the default model
+set.seed(1234)
+rf_default <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+    data = data_train,
+    method = "rf",
+    metric = "Accuracy",
+    trControl = trControl,
+    )
+
+# Print the results
+print(rf_default)
+
+# search best mtry
+
+set.seed(1234)
+tuneGrid <- expand.grid(.mtry = c(1: 10))
+rf_mtry <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+    data = data_train,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = trControl,
+    importance = TRUE,
+    nodesize = 14,
+    ntree = 300)
+print(rf_mtry)
+
+best_mtry <- rf_mtry$bestTune$mtry 
+
+# evaluate different maxnodes
+
+store_maxnode <- list()
+tuneGrid <- expand.grid(.mtry = best_mtry)
+for (maxnodes in c(5: 15)) {
+    set.seed(1234)
+    rf_maxnode <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+        data = data_train,
+        method = "rf",
+        metric = "Accuracy",
+        tuneGrid = tuneGrid,
+        trControl = trControl,
+        importance = TRUE,
+        nodesize = 14,
+        maxnodes = maxnodes,
+        ntree = 300)
+    current_iteration <- toString(maxnodes)
+    store_maxnode[[current_iteration]] <- rf_maxnode
+}
+results_mtry <- resamples(store_maxnode)
+summary(results_mtry)
+
+# search best ntrees
+
+store_maxtrees <- list()
+for (ntree in c(250, 300, 350, 400, 450, 500, 550, 600, 800, 1000, 2000)) {
+    set.seed(5678)
+    rf_maxtrees <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+        data = data_train,
+        method = "rf",
+        metric = "Accuracy",
+        tuneGrid = tuneGrid,
+        trControl = trControl,
+        importance = TRUE,
+        nodesize = 14,
+        maxnodes = 26,
+        ntree = ntree)
+    key <- toString(ntree)
+    store_maxtrees[[key]] <- rf_maxtrees
+}
+results_tree <- resamples(store_maxtrees)
+summary(results_tree)
+
+# create final model 
+
+fit_rf <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+    data_train,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = trControl,
+    importance = TRUE,
+    nodesize = 14,
+    ntree = 1000,
+    maxnodes = 26)
+
+#evaluate the model
+
+prediction <-predict(fit_rf, data_test)
+confusionMatrix(prediction,as.factor(data_test$fastball))
+
+varImpPlot(fit_rf)
+
+
 ```
 
