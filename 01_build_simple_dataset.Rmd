@@ -51,14 +51,17 @@ pitches_one_game %>% View()
 ```{r}
 pitches_one_game %>% 
   count(pitch_type)
+
+merged_data_2018 %>%
+  count(p_throws)
 ```
 
-creating the dataframe
+creating the dataframe - add score to datatset - more seasons - batter stance - pitcher stance
 
 ```{r}
 df_final <-
-	merged_data_2018 %>% 
-	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id) %>% 
+	merged_data %>% 
+	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
 	mutate(
 		fastball = 
 			case_when(
@@ -128,7 +131,7 @@ df_multi_class <-
 ```
 
 
-data visualization and analysis
+data visualization and analysis 
 
 ```{r}
 # ggplot(data = df_final) +

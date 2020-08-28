@@ -7,12 +7,16 @@ library(e1071)
 library(randomForest)
 library(rsample)
 library(caret)
+
+
 ```
+
+do test/train split
 
 ```{r}
 model <- 
 	glm(
-		fastball ~ s_count + b_count + pitch_num + last_ff_not,
+		fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws,
 		data = df_final,
 		family = "binomial"
 	)
@@ -41,6 +45,8 @@ df_final_with_pred %>%
 	summarize(mean(correct, na.rm = TRUE))
 ```
 
+
+
 ```{r}
 model_svm <- 
 	svm(
@@ -60,6 +66,8 @@ df_final %>%
 	summarize(mean(correct))
 ```
 
+When tuning the model rearrange the order of tuning methods. 
+
 ```{r}
 df_split <- initial_split(df_final, prop = .7)
 data_train <- training(df_split)
@@ -75,7 +83,7 @@ trControl <- trainControl(method = "cv",
 
 #Run the default model
 set.seed(1234)
-rf_default <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+rf_default <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws,
     data = data_train,
     method = "rf",
     metric = "Accuracy",
@@ -89,7 +97,7 @@ print(rf_default)
 
 set.seed(1234)
 tuneGrid <- expand.grid(.mtry = c(1: 10))
-rf_mtry <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+rf_mtry <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws,
     data = data_train,
     method = "rf",
     metric = "Accuracy",
@@ -108,7 +116,7 @@ store_maxnode <- list()
 tuneGrid <- expand.grid(.mtry = best_mtry)
 for (maxnodes in c(5: 15)) {
     set.seed(1234)
-    rf_maxnode <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+    rf_maxnode <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + on_1b + on_2b + on_3b + stand + p_throws,
         data = data_train,
         method = "rf",
         metric = "Accuracy",
@@ -129,7 +137,7 @@ summary(results_mtry)
 store_maxtrees <- list()
 for (ntree in c(250, 300, 350, 400, 450, 500, 550, 600, 800, 1000, 2000)) {
     set.seed(5678)
-    rf_maxtrees <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+    rf_maxtrees <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws,
         data = data_train,
         method = "rf",
         metric = "Accuracy",
@@ -147,7 +155,7 @@ summary(results_tree)
 
 # create final model 
 
-fit_rf <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b,
+fit_rf <- train(as.factor(fastball) ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws,
     data_train,
     method = "rf",
     metric = "Accuracy",
