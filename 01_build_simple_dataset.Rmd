@@ -92,6 +92,7 @@ df_final <-
     mutate(fastball = ifelse(fastball == "yes", 1, 0))
 ```
 
+
 Multi Class Dataframe
 
 ```{r}
@@ -187,5 +188,7 @@ save df_final
 
 ```{r}
 df_final %>% write_rds("data-for-models/df_final.rds")
+df_final %>%write_csv("data-for-models/df_final.csv")
+df_multi_class %>% write_csv("data-for-models/df_multi_class.csv")
 
 ```
