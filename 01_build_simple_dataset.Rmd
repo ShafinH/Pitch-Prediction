@@ -70,6 +70,7 @@ df_final <-
 				is.na(pitch_type) ~ "N/A",
 				pitch_type == "FF" ~ "yes",
 				pitch_type == "FT" ~ "yes",
+				pitch_type == "FC" ~ "yes",
 				TRUE ~ "no"
 			) # Creating a new column which says 'yes' if pitch is fastball, 'no' if not
 	) %>% 
@@ -109,7 +110,7 @@ df_multi_class <-
 				is.na(pitch_type) ~ "N/A",
 				pitch_type == "FF" ~ "FF",
 				pitch_type == "FT" ~ "FF",
-				pitch_type == "FC" ~ "FC",
+				pitch_type == "FC" ~ "FF",
 				pitch_type == "CU" ~ "CU/SL",
 				pitch_type == "SL" ~ "CU/SL",
 				pitch_type == "CH" ~ "CH",
