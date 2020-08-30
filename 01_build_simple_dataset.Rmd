@@ -135,6 +135,41 @@ df_final_2018 <-
     mutate(fastball = ifelse(fastball == "yes", 1, 0))
 ```
 
+```{r}
+df_final_100 <-
+	merged_data_multiple_games %>% 
+	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
+	mutate(
+		fastball = 
+			case_when(
+				is.na(pitch_type) ~ "N/A",
+				pitch_type == "FF" ~ "yes",
+				pitch_type == "FT" ~ "yes",
+				pitch_type == "FC" ~ "yes",
+				TRUE ~ "no"
+			) # Creating a new column which says 'yes' if pitch is fastball, 'no' if not
+	) %>% 
+    mutate(
+    	last_ff_not = 
+    		lag(
+    			case_when(
+    				is.na(pitch_type) ~ "N/A",
+    				pitch_type == "FF" ~ "FF",
+    				pitch_type == "FT" ~ "FF",
+    				pitch_type == "FC" ~ "FF",
+    				pitch_type == "CU" ~ "CU/SL",
+    				pitch_type == "SL" ~ "CU/SL",
+    				pitch_type == "CH" ~ "CH",
+    				TRUE ~ "OTHER"), 1
+    		) # Adding a column which writes teh value of the previous pitch
+    ) %>% 
+	select(-pitch_type) # remove the column "pitch_type" as we do not need it anymore
+
+df_final_100 <-
+  df_final_100 %>%
+    mutate(fastball = ifelse(fastball == "yes", 1, 0))
+```
+
 Multi Class Dataframe
 
 ```{r}
@@ -227,5 +262,7 @@ save dataframe to csv and rds
 df_final %>% write_rds("data-for-models/df_final.rds")
 df_final %>%write_csv("data-for-models/df_final.csv")
 df_multi_class %>% write_csv("data-for-models/df_multi_class.csv")
+df_final_2018 %>% write_csv("data-for-models/df_final_2018.csv")
+df_final_100 %>% write_csv("data-for-models/df_final_100.csv")
 
 ```
