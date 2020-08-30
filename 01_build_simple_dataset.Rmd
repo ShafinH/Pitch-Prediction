@@ -137,7 +137,7 @@ df_final_2018 <-
 
 ```{r}
 df_final_100 <-
-	merged_data_multiple_games %>% 
+	merged_data_100_games %>% 
 	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
 	mutate(
 		fastball = 
