@@ -54,6 +54,10 @@ merged_data_2018 <-
   merged_data %>%
   filter(g_id >= 201800000)
 
+merged_data_100_games <-
+  merged_data %>%
+  filter(g_id >= 201800000 & g_id <= 201800100)
+
 ```
 
 creating the binary dataframe 
@@ -95,6 +99,41 @@ df_final <-
     mutate(fastball = ifelse(fastball == "yes", 1, 0))
 ```
 
+
+```{r}
+df_final_2018 <-
+	merged_data_2018 %>% 
+	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
+	mutate(
+		fastball = 
+			case_when(
+				is.na(pitch_type) ~ "N/A",
+				pitch_type == "FF" ~ "yes",
+				pitch_type == "FT" ~ "yes",
+				pitch_type == "FC" ~ "yes",
+				TRUE ~ "no"
+			) # Creating a new column which says 'yes' if pitch is fastball, 'no' if not
+	) %>% 
+    mutate(
+    	last_ff_not = 
+    		lag(
+    			case_when(
+    				is.na(pitch_type) ~ "N/A",
+    				pitch_type == "FF" ~ "FF",
+    				pitch_type == "FT" ~ "FF",
+    				pitch_type == "FC" ~ "FF",
+    				pitch_type == "CU" ~ "CU/SL",
+    				pitch_type == "SL" ~ "CU/SL",
+    				pitch_type == "CH" ~ "CH",
+    				TRUE ~ "OTHER"), 1
+    		) # Adding a column which writes teh value of the previous pitch
+    ) %>% 
+	select(-pitch_type) # remove the column "pitch_type" as we do not need it anymore
+
+df_final_2018 <-
+  df_final_2018 %>%
+    mutate(fastball = ifelse(fastball == "yes", 1, 0))
+```
 
 Multi Class Dataframe
 

@@ -19,8 +19,6 @@ pitches_plot <- within(pitches,
                                                         decreasing=TRUE))))
 ggplot(pitches_plot) +
   geom_bar(mapping = aes(x=pitch_type)) 
-  
-
 
 ```
 

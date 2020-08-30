@@ -52,7 +52,9 @@ model_svm <-
 		fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws,
 		data = 
 			df_final_2018 %>% 
-			mutate(fastball = ifelse(fastball == 1, 1, -1))
+			mutate(fastball = ifelse(fastball == 1, 1, -1)),
+		 gamma =1,
+		 cost = 10
 	)
 
 df_final_2018 %>% 
@@ -63,6 +65,8 @@ df_final_2018 %>%
 		correct = fastball == pred2
 	) %>% 
 	summarize(mean(correct))
+
+
 ```
 
 When tuning the model rearrange the order of tuning methods. 
