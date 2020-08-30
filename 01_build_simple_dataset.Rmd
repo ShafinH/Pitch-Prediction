@@ -67,7 +67,7 @@ creating the binary dataframe
 # creating binary data frame with certain columns from the merged data file
 df_final <-
 	merged_data %>% 
-	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
+	select(pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
 	mutate(
 		fastball = 
 			case_when(
@@ -103,7 +103,7 @@ df_final <-
 ```{r}
 df_final_2018 <-
 	merged_data_2018 %>% 
-	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
+	select(pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
 	mutate(
 		fastball = 
 			case_when(
@@ -138,7 +138,7 @@ df_final_2018 <-
 ```{r}
 df_final_100 <-
 	merged_data_100_games %>% 
-	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
+	select(pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id, stand, p_throws) %>% 
 	mutate(
 		fastball = 
 			case_when(
@@ -177,7 +177,7 @@ Multi Class Dataframe
 # creating a dataframe for multi classifcation(not binary)
 df_multi_class <-
 	merged_data_2018 %>% 
-	select(g_id, ab_id, pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id) %>% 
+	select(pitch_type, s_count, b_count, pitch_num, on_1b, on_2b, on_3b, pitcher_id) %>% 
 	mutate(
 		fastball = 
 			case_when(
