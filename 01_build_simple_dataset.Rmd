@@ -162,7 +162,7 @@ df_final_100 <-
     				pitch_type == "CH" ~ "CH",
     				TRUE ~ "OTHER"), 1
     		) # Adding a column which writes teh value of the previous pitch
-    ) %>% 
+    ) %>%
 	select(-pitch_type) # remove the column "pitch_type" as we do not need it anymore
 
 df_final_100 <-
