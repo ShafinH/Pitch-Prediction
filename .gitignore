@@ -4,12 +4,14 @@
 .Ruserdata
 data-raw/
 data-clean/
+Pitch.Rproj
+data-for-models/
+.vscode/
 <<<<<<< HEAD
 *.Rproj
 .DS_Store
 =======
-Pitch.Rproj
-data-for-models/
+
 
 >>>>>>> ea1c53fb65bdbfd932aa9d2c57bfd046b9ca0ebf
 .vscode/settings.json
