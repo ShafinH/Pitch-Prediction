@@ -16,14 +16,14 @@ do test/train split
 model <- 
 	glm(
 		fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws + pitcher_id,
-		data = df_final_2018,
+		data = df_final,
 		family = "binomial"
 	)
 
 tidy(model)
 
 df_final_with_pred <- 
-	df_final_2018 %>% 
+	df_final %>% 
 	add_predictions(model, type = "response")
 
 df_final_with_pred %>% 
