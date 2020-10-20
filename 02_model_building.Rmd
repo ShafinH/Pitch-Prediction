@@ -7,6 +7,7 @@ library(e1071)
 library(randomForest)
 library(rsample)
 library(caret)
+library(liquidSVM)
 
 ```
 
@@ -47,17 +48,23 @@ df_final_with_pred %>%
 
 
 ```{r}
+		data <- 
+			df_final_100 %>% 
+			mutate(fastball = as.factor(ifelse(fastball == 1, 1, -1)))
+
 model_svm <- 
 	svm(
-		fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws,
-		data = 
-			df_final_100 %>% 
-			mutate(fastball = ifelse(fastball == 1, 1, -1)),
-		 gamma =1,
-		 cost = 10
+		fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws + pitcher_id,
+    data
 	)
 
-df_final_100 %>% 
+# model <- lm(mpg ~ cyl + hp, data = mtcars)
+# write_rds(model, "~/Desktop/model.rds")
+
+
+```
+
+df_final_2018 %>% 
 	slice(-1) %>% 
 	mutate(pred = predict(model_svm)) %>% 
 	mutate(pred2 = as.integer(pred > 0)) %>% 
@@ -65,9 +72,6 @@ df_final_100 %>%
 		correct = fastball == pred2
 	) %>% 
 	summarize(mean(correct))
-
-
-```
 
 When tuning the model rearrange the order of tuning methods. 
 
