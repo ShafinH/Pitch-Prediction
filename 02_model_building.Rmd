@@ -7,7 +7,6 @@ library(e1071)
 library(randomForest)
 library(rsample)
 library(caret)
-library(liquidSVM)
 
 ```
 
@@ -48,7 +47,8 @@ df_final_with_pred %>%
 
 
 ```{r}
-		data <- 
+		
+data <- 
 			df_final_100 %>% 
 			mutate(fastball = as.factor(ifelse(fastball == 1, 1, -1)))
 
@@ -59,7 +59,8 @@ model_svm <-
 	)
 
 # model <- lm(mpg ~ cyl + hp, data = mtcars)
-# write_rds(model, "~/Desktop/model.rds")
+
+saveRDS(model_svm, "model.rds")
 
 
 ```
