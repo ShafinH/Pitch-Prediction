@@ -31,7 +31,7 @@ server <- function(input, output) {
     # load svm in server
     # use predict function on results
     
-    # model <- read_rds(“~/Desktop/model.rds”)
+    model <- readRDS("../model.rds")
 
     
     prediction <- predict(model,results)
