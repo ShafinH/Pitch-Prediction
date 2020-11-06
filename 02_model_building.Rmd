@@ -54,7 +54,7 @@ data <-
 
 model_svm <- 
 	svm(
-		fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws + pitcher_id,
+		fastball ~ s_count + b_count + pitch_num + last_ff_not + on_1b + on_2b + on_3b + stand + p_throws,
     data
 	)
 
@@ -62,7 +62,7 @@ model_svm <-
 
 saveRDS(model_svm, "model.rds")
 
-
+?svm
 ```
 
 df_final_2018 %>% 
