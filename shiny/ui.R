@@ -7,7 +7,6 @@ ui <- pageWithSidebar(
   
   sidebarPanel(
     p("Fill in the game scenario"),
-    numericInput("pitcher_id", "Pitcher id", 0, min = 0, step = 1),
     numericInput("s_count", "Strike Count", 0, min = 0, max = 2, step = 1),
     numericInput("b_count", "Ball Count", 0, min = 0, max = 3, step = 1),
     textInput("last_ff_not", "Previous Pitch", value = "FF", width = NULL, placeholder = NULL),
