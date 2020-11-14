@@ -9,6 +9,8 @@ library(randomForest)
 library(rsample)
 library(caret)
 
+df_final_100 <- read_csv("df_final_100.csv")
+
 data <- 
   tibble()
 
@@ -61,8 +63,17 @@ server <- function(input, output) {
     
     prediction <- predict(model, newdata = new)
     
+    predictions = ''
+    
+    
+    if (prediction[1] == 1){
+      predictions = "Fastball"
+      } else {
+      predictions = "Not a Fastball"
+    }
+    
     tibble(
-      'Prediction' = as.character((prediction[1]))
+      'Prediction' = predictions
     )
     
    

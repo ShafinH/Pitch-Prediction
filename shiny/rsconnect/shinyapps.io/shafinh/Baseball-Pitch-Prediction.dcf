@@ -1,0 +1,13 @@
+name: Baseball-Pitch-Prediction
+title: Baseball-Pitch-Prediction
+username:
+account: shafinh
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3230328
+bundleId: 3858684
+url: https://shafinh.shinyapps.io/Baseball-Pitch-Prediction/
+when: 1605317891.07691
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: df_final_100.csv|model.rds

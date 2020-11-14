@@ -265,6 +265,6 @@ df_final %>% write_rds("data-for-models/df_final.rds")
 df_final %>%write_csv("data-for-models/df_final.csv")
 df_multi_class %>% write_csv("data-for-models/df_multi_class.csv")
 df_final_2018 %>% write_csv("data-for-models/df_final_2018.csv")
-df_final_100 %>% write_csv("data-for-models/df_final_100.csv")
+df_final_100 %>% write_csv("shiny/df_final_100.csv")
 
 ```
