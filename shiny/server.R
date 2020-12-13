@@ -40,7 +40,7 @@ server <- function(input, output) {
     # load svm in server
     # use predict function on results
     
-    model <- readRDS("../model.rds")
+    model <- readRDS("model.rds")
 
     testResults <-
       tibble(

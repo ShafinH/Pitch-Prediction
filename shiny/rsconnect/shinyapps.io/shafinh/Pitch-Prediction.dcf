@@ -1,0 +1,12 @@
+name: Pitch-Prediction
+title: Pitch-Prediction
+username:
+account: shafinh
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3394502
+bundleId: 3981964
+url: https://shafinh.shinyapps.io/Pitch-Prediction/
+when: 1607847422.14468
+asMultiple: FALSE
+asStatic: FALSE
