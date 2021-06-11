@@ -5,4 +5,4 @@ Read More: [here](https://medium.com/towards-artificial-intelligence/baseball-pi
 
 Try it Out: [here](https://shafinh.shinyapps.io/Pitch-Prediction/)
 
-Data from 2015-2018
+Data from the 2015-2018 MLB seasons
