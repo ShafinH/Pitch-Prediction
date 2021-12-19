@@ -1,7 +1,7 @@
 # [Pitch Prediciton](https://shafinh.shinyapps.io/Pitch-Prediction/)
 Predicting the next pitch in baseball with machine learning.
 
-Read More: [here](https://medium.com/towards-artificial-intelligence/baseball-pitch-prediction-e1da2a0a8b30)
+Read More: [here](https://towardsai.net/p/machine-learning/baseball-pitch-prediction)
 
 Try it Out: [here](https://shafinh.shinyapps.io/Pitch-Prediction/)
 
